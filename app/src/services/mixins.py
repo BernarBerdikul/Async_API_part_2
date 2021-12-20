@@ -1,9 +1,8 @@
 from typing import Optional, Union
 
 from aioredis import Redis
-from elasticsearch import AsyncElasticsearch, NotFoundError
-
 from core.config import CACHE_EXPIRE_IN_SECONDS
+from elasticsearch import AsyncElasticsearch, NotFoundError
 from models.film import ESFilm
 from models.genre import ElasticGenre
 from models.person import ElasticPerson

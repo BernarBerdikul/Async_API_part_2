@@ -3,11 +3,10 @@ from typing import Optional
 
 import orjson
 from aioredis import Redis
-from elasticsearch import AsyncElasticsearch
-from fastapi import Depends
-
 from db.elastic import get_elastic
 from db.redis import get_redis
+from elasticsearch import AsyncElasticsearch
+from fastapi import Depends
 from models.film import ESFilm, ListResponseFilm
 from services.mixins import ServiceMixin
 from services.pagination import get_by_pagination
@@ -15,7 +14,6 @@ from services.utils import create_hash_key, get_hits, get_params_films_to_elasti
 
 
 class FilmService(ServiceMixin):
-
     async def get_all_films(
         self,
         page: int,

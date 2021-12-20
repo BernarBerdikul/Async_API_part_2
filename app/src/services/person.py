@@ -4,11 +4,10 @@ from typing import Optional
 
 import orjson
 from aioredis import Redis
-from elasticsearch import AsyncElasticsearch
-from fastapi import Depends, HTTPException
-
 from db.elastic import get_elastic
 from db.redis import get_redis
+from elasticsearch import AsyncElasticsearch
+from fastapi import Depends, HTTPException
 from models.film import ESFilm, ListResponseFilm
 from models.person import DetailResponsePerson, ElasticPerson
 from services.mixins import ServiceMixin
@@ -17,7 +16,6 @@ from services.utils import create_hash_key, get_hits
 
 
 class PersonService(ServiceMixin):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.person_films: int = 0
@@ -40,7 +38,7 @@ class PersonService(ServiceMixin):
     async def get_person_films(
         self, film_ids: list[str], page: int, page_size: int
     ) -> Optional[dict]:
-        """ Получаем число фильмов персоны из стейт """
+        """Получаем число фильмов персоны из стейт"""
         state_total: int = await self.get_person_films_count()
         body: dict = {
             "size": page_size,

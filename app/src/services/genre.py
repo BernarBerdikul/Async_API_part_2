@@ -3,11 +3,10 @@ from typing import Optional
 
 import orjson
 from aioredis import Redis
-from elasticsearch import AsyncElasticsearch
-from fastapi import Depends
-
 from db.elastic import get_elastic
 from db.redis import get_redis
+from elasticsearch import AsyncElasticsearch
+from fastapi import Depends
 from models.genre import ElasticGenre, FilmGenre
 from services.mixins import ServiceMixin
 from services.pagination import get_by_pagination

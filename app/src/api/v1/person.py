@@ -2,7 +2,6 @@ from http import HTTPStatus
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from models.film import FilmPagination
 from models.person import DetailResponsePerson, PersonPagination
 from services.person import PersonService, get_person_service

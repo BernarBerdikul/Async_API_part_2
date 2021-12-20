@@ -1,4 +1,3 @@
-
 PERSON_INDEX_BODY: dict = {
     "settings": {
         "refresh_interval": "1s",

@@ -2,7 +2,6 @@ from http import HTTPStatus
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from models.genre import DetailResponseGenre, ElasticGenre, GenrePagination
 from services.genre import GenreService, get_genre_service
 
