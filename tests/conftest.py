@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from multidict import CIMultiDictProxy
 from elasticsearch import AsyncElasticsearch
 
-SERVICE_URL = 'http://127.0.0.1:8000'
+from settings import Settings
 
 
 @dataclass
@@ -54,7 +54,7 @@ def make_get_request(session):
         :return:
         """
         params = params or {}
-        url = f'{SERVICE_URL}/api/v1{path}'
+        url = f'{Settings.SERVICE_URL}/api/v1{path}'
         async with session.get(url, params=params) as response:
             return HTTPResponse(
                 body=await response.json(),
