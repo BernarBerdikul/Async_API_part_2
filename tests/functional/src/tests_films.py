@@ -1,17 +1,17 @@
 import pytest
 
-from testdata.search_parametrs import film_search_params
+from testdata.search_parametrs import films_params
 from utils.checkpoints_status import check_results
 
 
 @pytest.mark.parametrize(
     "path, query, status, page_size",
     [
-        *film_search_params,
+        *films_params,
     ]
 )
 @pytest.mark.asyncio
-async def test_get_film_search(
+async def test_get_films(
         make_get_request,
         path: str,
         query: dict,
