@@ -2,7 +2,6 @@ from http import HTTPStatus
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from models.genre import DetailResponseGenre, ElasticGenre, GenrePagination
 from services.genre import GenreService, get_genre_service
 
@@ -15,7 +14,7 @@ router = APIRouter()
     summary="Список жанров кино",
     description="Список жанров кино",
     response_description="Название жанра",
-    tags=['genre_service']
+    tags=["genre_service"],
 )
 async def genres_list(
     genre_service: GenreService = Depends(get_genre_service),
@@ -37,7 +36,7 @@ async def genres_list(
     summary="Поиск жанра по ID",
     description="Поиск жанра по ID",
     response_description="Название жанра",
-    tags=['genre_service']
+    tags=["genre_service"],
 )
 async def genre_details(
     genre_id: str, genre_service: GenreService = Depends(get_genre_service)

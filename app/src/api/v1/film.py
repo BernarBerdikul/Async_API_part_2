@@ -1,9 +1,8 @@
 from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
-
 from api.v1.utils import FilmQueryParams
+from fastapi import APIRouter, Depends, HTTPException
 from models.film import DetailResponseFilm, ESFilm, FilmPagination
 from models.person import FilmPerson
 from services.film import FilmService, get_film_service
@@ -17,7 +16,7 @@ router = APIRouter()
     summary="Поиск кинопроизведений",
     description="Полнотекстовый поиск по кинопроизведениям",
     response_description="Название и рейтинг фильма",
-    tags=['film_service']
+    tags=["film_service"],
 )
 async def search_film_list(
     params: FilmQueryParams = Depends(),
@@ -44,7 +43,7 @@ async def search_film_list(
     summary="Поиск кинопроизведения по ID",
     description="Поиск кинопроизведения по ID",
     response_description="Полная информация о фильме",
-    tags=['film_service']
+    tags=["film_service"],
 )
 async def film_details(
     film_id: str, film_service: FilmService = Depends(get_film_service)

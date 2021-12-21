@@ -1,9 +1,8 @@
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel
-
 from models.mixin import BaseModelMixin, PaginationMixin
+from pydantic import BaseModel
 
 
 class ElasticPerson(BaseModel):
