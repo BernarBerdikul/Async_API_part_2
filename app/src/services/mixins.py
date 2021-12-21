@@ -17,6 +17,13 @@ class ServiceMixin:
         self.redis = redis
         self.elastic = elastic
         self.index = index
+        self.total_count: int = 0
+
+    async def get_total_count(self) -> int:
+        return self.total_count
+
+    async def set_total_count(self, value: int):
+        self.total_count = value
 
     async def search_in_elastic(
         self, body: dict, _source=None, sort=None, _index=None
@@ -24,11 +31,10 @@ class ServiceMixin:
         if not _index:
             _index = self.index
 
-        sort_field = sort[0]
+        sort_field = sort[0] if not isinstance(sort, str) and sort else sort
         if sort_field:
-            order = 'desc' if sort_field.startswith('-') else 'asc'
-            sort_field = "{field}:{order}".format(field=sort_field.removeprefix('-'), order=order)
-
+            order = "desc" if sort_field.startswith("-") else "asc"
+            sort_field = f"{sort_field.removeprefix('-')}:{order}"
         try:
             return await self.elastic.search(
                 index=_index, _source=_source, body=body, sort=sort_field
@@ -64,10 +70,7 @@ class ServiceMixin:
     async def _get_result_from_cache(self, key: str) -> Optional[bytes]:
         """Пытаемся получить данные об объекте из кеша"""
         data = await self.redis.get(key=key)
-        if not data:
-            return None
-        """создания объекта моделей из json"""
-        return data
+        return data or None
 
     async def _put_data_to_cache(self, key: str, instance: Union[bytes, str]) -> None:
         """Сохраняем данные об объекте в кеш, время жизни кеша — 5 минут"""

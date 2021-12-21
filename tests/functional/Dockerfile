@@ -15,4 +15,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
 # copy project
 COPY . .
 
-CMD ["python", "load_data.py"]
+CMD ["python", "main.py"]

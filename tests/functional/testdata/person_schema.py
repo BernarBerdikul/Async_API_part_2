@@ -1,4 +1,4 @@
-TEMPLATE_INDEX_BODY: dict = {
+PERSON_INDEX_BODY: dict = {
     "settings": {
         "refresh_interval": "1s",
         "analysis": {
@@ -26,5 +26,18 @@ TEMPLATE_INDEX_BODY: dict = {
                 }
             },
         },
-    }
+    },
+    "mappings": {
+        "dynamic": "strict",
+        "properties": {
+            "id": {"type": "keyword"},
+            "full_name": {
+                "type": "text",
+                "analyzer": "ru_en",
+                "fields": {"raw": {"type": "keyword"}},
+            },
+            "roles": {"type": "keyword", "analyzer": "ru_en"},
+            "film_ids": {"type": "keyword", "analyzer": "ru_en"},
+        },
+    },
 }

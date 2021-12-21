@@ -10,7 +10,7 @@ services:
     ports:
       - '6379:6379'
     networks:
-      - api_network
+      - test_network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
@@ -19,55 +19,36 @@ services:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     networks:
-      - api_network
+      - test_network
     ports:
       - "9200:9200"
-
-  postgres_etl:
-    image: postgres:13.3-alpine
-    container_name: postgres_etl
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - envs/postgres.env
-    networks:
-      - api_network
-    ports:
-      - "5432:5432"
 
   fastapi:
     container_name: fastapi
     build:
-      context: ./src
+      context: ./app/src
       dockerfile: Dockerfile
     env_file:
       - envs/fastapi.env
     networks:
-      - api_network
+      - test_network
     ports:
       - "8000:8000"
     depends_on:
       - redis
       - elasticsearch
 
-  etl:
-    container_name: etl
-    volumes:
-      - etl_logs:/usr/src/app/logs/
+  test_service:
+    container_name: test_service
     build:
-      context: ./etl
+      context: ./test/functional
       dockerfile: Dockerfile
-    env_file:
-      - envs/etl.env
     networks:
-      - api_network
+      - test_network
     depends_on:
+      - fastapi
+      - redis
       - elasticsearch
-      - postgres_etl
 
 networks:
-  api_network:
-
-volumes:
-  postgres_data:
-  etl_logs:
+  test_network:
