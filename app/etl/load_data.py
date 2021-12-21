@@ -3,6 +3,8 @@ from contextlib import closing
 from datetime import datetime
 
 import psycopg2
+
+from app.etl.services import backoff
 from config import dsl, es_conf
 from elasticsearch_loader import ElasticSearchLoader
 from index_schemas import FILM_WORK_INDEX_BODY, GENRE_INDEX_BODY, PERSON_INDEX_BODY
@@ -11,7 +13,6 @@ from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 from query import film_work_query, genre_query, person_query
 
-from services import backoff
 
 logger = logging.getLogger("LoaderStart")
 

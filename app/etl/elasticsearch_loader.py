@@ -3,9 +3,10 @@ import logging
 from datetime import datetime
 
 from elasticsearch import Elasticsearch
+
+from app.etl.services import backoff
 from state import JsonFileStorage, State
 
-from services import backoff
 
 logger = logging.getLogger("ESLoader")
 
