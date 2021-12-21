@@ -1,8 +1,9 @@
 from typing import Optional, Union
 
 from aioredis import Redis
-from core.config import CACHE_EXPIRE_IN_SECONDS
 from elasticsearch import AsyncElasticsearch, NotFoundError
+
+from core.config import CACHE_EXPIRE_IN_SECONDS
 from models.film import ESFilm
 from models.genre import ElasticGenre
 from models.person import ElasticPerson
@@ -69,10 +70,7 @@ class ServiceMixin:
     async def _get_result_from_cache(self, key: str) -> Optional[bytes]:
         """Пытаемся получить данные об объекте из кеша"""
         data = await self.redis.get(key=key)
-        if not data:
-            return None
-        """создания объекта моделей из json"""
-        return data
+        return data or None
 
     async def _put_data_to_cache(self, key: str, instance: Union[bytes, str]) -> None:
         """Сохраняем данные об объекте в кеш, время жизни кеша — 5 минут"""

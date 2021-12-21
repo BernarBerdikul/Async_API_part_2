@@ -1,5 +1,6 @@
-from models.mixin import BaseModelMixin, PaginationMixin
 from pydantic import BaseModel
+
+from models.mixin import BaseModelMixin, PaginationMixin
 
 
 class ElasticGenre(BaseModel):

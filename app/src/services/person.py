@@ -4,10 +4,11 @@ from typing import Optional
 
 import orjson
 from aioredis import Redis
-from db.elastic import get_elastic
-from db.redis import get_redis
 from elasticsearch import AsyncElasticsearch
 from fastapi import Depends, HTTPException
+
+from db.elastic import get_elastic
+from db.redis import get_redis
 from models.film import ESFilm, ListResponseFilm
 from models.person import DetailResponsePerson, ElasticPerson
 from services.mixins import ServiceMixin
@@ -108,6 +109,8 @@ class PersonService(ServiceMixin):
         )
         if not instance:
             docs: Optional[dict] = await self.search_in_elastic(body=body)
+            if not docs:
+                return None
             """ Получаем персон из ES """
             hits = get_hits(docs=docs, schema=ElasticPerson)
             """ Получаем число персон """

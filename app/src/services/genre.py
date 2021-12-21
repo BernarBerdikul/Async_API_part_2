@@ -3,10 +3,11 @@ from typing import Optional
 
 import orjson
 from aioredis import Redis
-from db.elastic import get_elastic
-from db.redis import get_redis
 from elasticsearch import AsyncElasticsearch
 from fastapi import Depends
+
+from db.elastic import get_elastic
+from db.redis import get_redis
 from models.genre import ElasticGenre, FilmGenre
 from services.mixins import ServiceMixin
 from services.pagination import get_by_pagination
@@ -31,6 +32,8 @@ class GenreService(ServiceMixin):
         )
         if not instance:
             docs: Optional[dict] = await self.search_in_elastic(body=body)
+            if not docs:
+                return None
             """ Получаем жанры из ES """
             hits = get_hits(docs=docs, schema=ElasticGenre)
             """ Получаем число жанров """

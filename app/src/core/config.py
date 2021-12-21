@@ -2,8 +2,9 @@ import os
 from logging import config as logging_config
 from pathlib import Path
 
-from core.logger import LOGGING
 from dotenv import load_dotenv
+
+from core.logger import LOGGING
 
 env_path = Path(__file__).resolve().parent.parent.parent / "envs/fastapi.env"
 load_dotenv(dotenv_path=env_path)
