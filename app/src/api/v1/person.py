@@ -1,13 +1,11 @@
 from http import HTTPStatus
 from typing import Optional
 
+from api.v1.utils import PersonSearchParam
 from fastapi import APIRouter, Depends, HTTPException
-
 from models.film import FilmPagination
 from models.person import DetailResponsePerson, PersonPagination
 from services.person import PersonService, get_person_service
-
-from api.v1.utils import PersonSearchParam
 
 router = APIRouter()
 
@@ -18,7 +16,7 @@ router = APIRouter()
     summary="Поиск персоны по его имени",
     description="Поиск персоны по его имени",
     response_description="Список персон с их именем, ролью и фильмографией",
-    tags=['person_service']
+    tags=["person_service"],
 )
 async def person_search(
     params: PersonSearchParam = Depends(),
@@ -43,7 +41,7 @@ async def person_search(
     summary="Поиск персоны по ID",
     description="Поиск персоны по ID",
     response_description="Имя, роль и фильмография персоны",
-    tags=['person_service']
+    tags=["person_service"],
 )
 async def person_details(
     person_id: str, person_service: PersonService = Depends(get_person_service)
@@ -58,13 +56,13 @@ async def person_details(
 
 
 @router.get(
-    path="/{person_id}/film/",
+    path="/{person_id}/films/",
     response_model=FilmPagination,
     summary="Поиск персоны по его ID и выдача всех его кинопроизведений",
     description="Поиск персоны по его ID и выдача всех его кинопроизведений,"
-                "в которых он принимал участие",
+    "в которых он принимал участие",
     response_description="Название жанра",
-    tags=['person_service']
+    tags=["person_service"],
 )
 async def person_details(
     person_id: str,
