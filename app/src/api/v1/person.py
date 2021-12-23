@@ -64,7 +64,7 @@ async def person_details(
     response_description="Название жанра",
     tags=["person_service"],
 )
-async def person_details(
+async def get_person_films(
     person_id: str,
     person_service: PersonService = Depends(get_person_service),
     page: int = 1,
