@@ -2,10 +2,8 @@ from functools import lru_cache
 from typing import Optional
 
 import orjson
-from aioredis import Redis
-from db.elastic import get_elastic
-from db.redis import get_redis
-from elasticsearch import AsyncElasticsearch
+from db.cache import AbstractCache, get_cache
+from db.storage import AbstractStorage, get_storage
 from fastapi import Depends
 from models.genre import ElasticGenre, FilmGenre
 from services.mixins import ServiceMixin
@@ -69,7 +67,7 @@ class GenreService(ServiceMixin):
 # get_genre_service — это провайдер GenreService. Синглтон
 @lru_cache()
 def get_genre_service(
-    redis: Redis = Depends(get_redis),
-    elastic: AsyncElasticsearch = Depends(get_elastic),
+    cache: AbstractCache = Depends(get_cache),
+    storage: AbstractStorage = Depends(get_storage),
 ) -> GenreService:
-    return GenreService(redis=redis, elastic=elastic, index="genre_test")
+    return GenreService(cache=cache, storage=storage, index="genre")

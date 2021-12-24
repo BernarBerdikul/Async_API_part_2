@@ -2,10 +2,8 @@ from functools import lru_cache
 from typing import Optional
 
 import orjson
-from aioredis import Redis
-from db.elastic import get_elastic
-from db.redis import get_redis
-from elasticsearch import AsyncElasticsearch
+from db.cache import AbstractCache, get_cache
+from db.storage import AbstractStorage, get_storage
 from fastapi import Depends
 from models.film import ESFilm, ListResponseFilm
 from services.mixins import ServiceMixin
@@ -56,7 +54,8 @@ class FilmService(ServiceMixin):
             data = orjson.dumps([i.dict() for i in films])
             new_param: str = f"{total}{page}{page_size}{query}{genre}"
             await self._put_data_to_cache(
-                key=create_hash_key(index=self.index, params=new_param), instance=data
+                key=create_hash_key(index=self.index, params=new_param),
+                instance=data
             )
             """ Сохраняем число фильмов в стейт """
             await self.set_total_count(value=total)
@@ -82,7 +81,7 @@ class FilmService(ServiceMixin):
 # get_film_service — это провайдер FilmService. Синглтон
 @lru_cache()
 def get_film_service(
-    redis: Redis = Depends(get_redis),
-    elastic: AsyncElasticsearch = Depends(get_elastic),
+    cache: AbstractCache = Depends(get_cache),
+    storage: AbstractStorage = Depends(get_storage),
 ) -> FilmService:
-    return FilmService(redis=redis, elastic=elastic, index="movies_test")
+    return FilmService(cache=cache, storage=storage, index="movies_test")
