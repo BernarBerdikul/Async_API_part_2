@@ -157,4 +157,4 @@ def get_person_service(
     redis: Redis = Depends(get_redis),
     elastic: AsyncElasticsearch = Depends(get_elastic),
 ) -> PersonService:
-    return PersonService(redis=redis, elastic=elastic, index="person_test")
+    return PersonService(redis=redis, elastic=elastic, index="person")

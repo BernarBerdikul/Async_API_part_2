@@ -55,3 +55,4 @@ doc.html
 db.sqlite3
 static/
 media/
+.pytest_cache
