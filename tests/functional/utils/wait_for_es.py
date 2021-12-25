@@ -1,19 +1,18 @@
-from asyncio import sleep
-
-from tests.functional.conftest import make_get_request
+from time import sleep
+import requests
 
 
 def wait_for_es(url: str = "http://127.0.0.1:9200"):
-    """
-    Дождаться пока по адресу url заработает сервер ElasticSearch
-    """
+    """ Дождаться пока по адресу url заработает сервер ElasticSearch """
+    # Отправляем запрос в Elastic
     while True:
-        response = await make_get_request(url)
-        print(response)
-        print("Соединения с Elastic нет, попробуем позже")
-        sleep(5)
-        if response.json().get("tagline", "").lower():
-            print("Ответ Elastic не выглядит как надо, попробуем позже")
+        response = requests.get(url=url)
+        if response.json().get("tagline", "").lower() == "you know, for search":
+            return
+        else:
+            # Ответ Elastic не корректный, попробуем позже
             sleep(5)
             continue
-        return
+
+
+wait_for_es()

@@ -2,8 +2,7 @@ from typing import Optional
 
 
 def check_results(
-    status: int, expected_status: int, body: dict,
-        expected_page_size: Optional[int]
+    status: int, expected_status: int, body: dict, expected_page_size: Optional[int]
 ) -> None:
     """
     Сверяем ожидаемые значения с результатом запросов.

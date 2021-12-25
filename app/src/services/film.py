@@ -54,8 +54,7 @@ class FilmService(ServiceMixin):
             data = orjson.dumps([i.dict() for i in films])
             new_param: str = f"{total}{page}{page_size}{query}{genre}"
             await self._put_data_to_cache(
-                key=create_hash_key(index=self.index, params=new_param),
-                instance=data
+                key=create_hash_key(index=self.index, params=new_param), instance=data
             )
             """ Сохраняем число фильмов в стейт """
             await self.set_total_count(value=total)

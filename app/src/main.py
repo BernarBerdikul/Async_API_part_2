@@ -2,7 +2,7 @@ import aioredis
 import uvicorn
 from api.v1 import film, genre, person
 from core import config
-from db import elastic, cache, redis, storage
+from db import cache, elastic, redis, storage
 from elasticsearch import AsyncElasticsearch
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
@@ -30,8 +30,7 @@ async def startup():
     """Подключаемся к базам при старте сервера"""
     cache.cache = redis.CacheRedis(
         cache_instance=await aioredis.create_redis_pool(
-            (config.REDIS_HOST, config.REDIS_PORT),
-            minsize=10, maxsize=20
+            (config.REDIS_HOST, config.REDIS_PORT), minsize=10, maxsize=20
         )
     )
     storage.storage = elastic.StorageElasticsearch(

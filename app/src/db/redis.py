@@ -4,7 +4,6 @@ from db.cache import AbstractCache
 
 
 class CacheRedis(AbstractCache):
-
     async def get(self, key: str) -> Optional[dict]:
         return await self.cache.get(key=key)
 

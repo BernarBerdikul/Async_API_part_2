@@ -13,7 +13,6 @@ from services.pagination import get_by_pagination
 from services.utils import create_hash_key, get_hits
 
 
-
 class PersonService(ServiceMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,8 +51,10 @@ class PersonService(ServiceMixin):
         )
         if not instance:
             docs: Optional[dict] = await self.search_in_elastic(
-                body=body, _index="movies"
+                body=body, _index="movies_test"
             )
+            if not docs:
+                return None
             """ Получаем фильмы персоны из ES """
             hits = get_hits(docs=docs, schema=ESFilm)
             """ Получаем число фильмов персоны """

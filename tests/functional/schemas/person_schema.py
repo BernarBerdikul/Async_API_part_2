@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
-from .mixin import UUIDValidation, PaginationValidation
+from .mixin import PaginationValidation, UUIDValidation
 
 
 class FilmPersonValidation(UUIDValidation):

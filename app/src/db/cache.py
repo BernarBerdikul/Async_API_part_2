@@ -3,7 +3,6 @@ from typing import Optional, Union
 
 
 class AbstractCache(ABC):
-
     def __init__(self, cache_instance):
         self.cache = cache_instance
 

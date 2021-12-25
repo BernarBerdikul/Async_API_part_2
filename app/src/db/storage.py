@@ -3,7 +3,6 @@ from typing import Optional
 
 
 class AbstractStorage(ABC):
-
     def __init__(self, storage_instance):
         self.storage = storage_instance
 

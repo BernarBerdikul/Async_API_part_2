@@ -70,4 +70,4 @@ def get_genre_service(
     cache: AbstractCache = Depends(get_cache),
     storage: AbstractStorage = Depends(get_storage),
 ) -> GenreService:
-    return GenreService(cache=cache, storage=storage, index="genre")
+    return GenreService(cache=cache, storage=storage, index="genre_test")

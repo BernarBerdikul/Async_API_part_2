@@ -2,7 +2,6 @@ from db.storage import AbstractStorage
 
 
 class StorageElasticsearch(AbstractStorage):
-
     async def get(self, index: str, target_id: str) -> dict:
         return await self.storage.get(index=index, id=target_id)
 

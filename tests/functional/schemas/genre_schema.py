@@ -1,4 +1,4 @@
-from .mixin import UUIDValidation, PaginationValidation
+from .mixin import PaginationValidation, UUIDValidation
 
 
 class FilmGenreValidation(UUIDValidation):

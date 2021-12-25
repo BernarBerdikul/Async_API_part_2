@@ -1,5 +1,4 @@
 import asyncio
-
 from dataclasses import dataclass
 
 import aiohttp
@@ -41,21 +40,15 @@ async def session():
     await session.close()
 
 
-@pytest.fixture(scope="session")
-async def redis_client():
-    redis_client = await aioredis.create_redis_pool(
+@pytest.fixture()
+async def redis_cache():
+    cache = await aioredis.create_redis_pool(
         ("127.0.0.1", 6379), minsize=10, maxsize=20
     )
-    await redis_client.flushall()
-    yield redis_client
-    await redis_client.close()
-
-#
-# @pytest.fixture
-# async def reset_redis(redis_client):
-#     await redis_client.flushall()
-#     yield
-#     await redis_client.flushall()
+    await cache.flushall()
+    yield cache
+    cache.close()
+    await cache.wait_closed()
 
 
 @pytest.fixture
@@ -68,7 +61,7 @@ async def person_index(es_client):
         row_data=testdata.person_data,
     )
     yield
-    await es_client.indices.delete(index=index)
+    # await es_client.indices.delete(index=index)
 
 
 @pytest.fixture
@@ -99,21 +92,16 @@ async def movies_index(es_client):
 
 @pytest.fixture
 def make_get_request(session):
-    async def inner(
-        endpoint: str = None, params: dict = None, url: str = None
-    ) -> HTTPResponse:
+    async def inner(endpoint: str = None, params: dict = None) -> HTTPResponse:
         """
         :param endpoint: str
             Путь до нашего конечного url
         :param params: Optional[dict]
             Параметры для запроса
-        :param url: Optional[str]
-            Готовый адрес конечного url
         :return:
         """
         params = params or {}
-        if not url:
-            url = f"{Settings.SERVICE_URL}/api/v1/{endpoint}"
+        url = f"{Settings.SERVICE_URL}/api/v1/{endpoint}"
         async with session.get(url=url, params=params) as response:
             return HTTPResponse(
                 body=await response.json(),

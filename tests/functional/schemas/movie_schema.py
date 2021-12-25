@@ -1,7 +1,7 @@
 from typing import Optional
 
 from .genre_schema import FilmGenreValidation
-from .mixin import UUIDValidation, PaginationValidation
+from .mixin import PaginationValidation, UUIDValidation
 from .person_schema import FilmPersonValidation
 
 

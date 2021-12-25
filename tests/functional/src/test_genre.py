@@ -6,9 +6,7 @@ pytestmark = pytest.mark.asyncio
 
 
 async def test_list_genre(genre_index, make_get_request):
-    expected: dict = {
-
-    }
+    expected: dict = {}
     # Выполнение запроса
     response = await make_get_request(endpoint="genre/")
     print()

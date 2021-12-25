@@ -1,13 +1,12 @@
 from typing import Optional, Union
 
 from core.config import CACHE_EXPIRE_IN_SECONDS
+from db.cache import AbstractCache
+from db.storage import AbstractStorage
 from elasticsearch import NotFoundError
 from models.film import ESFilm
 from models.genre import ElasticGenre
 from models.person import ElasticPerson
-
-from db.cache import AbstractCache
-from db.storage import AbstractStorage
 
 Schemas: tuple = (ESFilm, ElasticGenre, ElasticPerson)
 ES_schemas = Union[Schemas]
@@ -74,6 +73,4 @@ class ServiceMixin:
 
     async def _put_data_to_cache(self, key: str, instance: Union[bytes, str]) -> None:
         """Сохраняем данные об объекте в кеш, время жизни кеша — 5 минут"""
-        await self.cache.set(
-            key=key, value=instance, expire=CACHE_EXPIRE_IN_SECONDS
-        )
+        await self.cache.set(key=key, value=instance, expire=CACHE_EXPIRE_IN_SECONDS)
