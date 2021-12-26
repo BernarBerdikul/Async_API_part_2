@@ -85,4 +85,4 @@ def get_film_service(
     redis: Redis = Depends(get_redis),
     elastic: AsyncElasticsearch = Depends(get_elastic),
 ) -> FilmService:
-    return FilmService(redis=redis, elastic=elastic, index="movies")
+    return FilmService(redis=redis, elastic=elastic, index="movies_test")

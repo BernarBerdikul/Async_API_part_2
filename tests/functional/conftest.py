@@ -2,6 +2,7 @@ import asyncio
 from dataclasses import dataclass
 
 import aiohttp
+import aioredis
 import pytest
 from elasticsearch import AsyncElasticsearch
 from multidict import CIMultiDictProxy
@@ -37,6 +38,17 @@ async def session():
     session = aiohttp.ClientSession()
     yield session
     await session.close()
+
+
+@pytest.fixture()
+async def redis_cache():
+    cache = await aioredis.create_redis_pool(
+        ("127.0.0.1", 6379), minsize=10, maxsize=20
+    )
+    await cache.flushall()
+    yield cache
+    cache.close()
+    await cache.wait_closed()
 
 
 @pytest.fixture
