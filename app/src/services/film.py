@@ -26,7 +26,7 @@ class FilmService(ServiceMixin):
         _source: tuple = ("id", "title", "imdb_rating", "genre")
         """ Получаем число фильмов из стейт """
         state_total: int = await self.get_total_count()
-        params: str = f"{state_total}{page}{page_size}{query}{genre}"
+        params: str = f"{state_total}{page}{sorting}{page_size}{query}{genre}"
         """ Пытаемся получить данные из кэша """
         instance = await self._get_result_from_cache(
             key=create_hash_key(index=self.index, params=params)
@@ -54,7 +54,7 @@ class FilmService(ServiceMixin):
             ]
             """ Сохраняем фильмы в кеш """
             data = orjson.dumps([i.dict() for i in films])
-            new_param: str = f"{total}{page}{page_size}{query}{genre}"
+            new_param: str = f"{total}{page}{sorting}{page_size}{query}{genre}"
             await self._put_data_to_cache(
                 key=create_hash_key(index=self.index, params=new_param), instance=data
             )

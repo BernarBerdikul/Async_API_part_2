@@ -29,7 +29,7 @@ services:
       context: ./app/src
       dockerfile: Dockerfile
     env_file:
-      - envs/fastapi.env
+      - app/envs/fastapi.env
     networks:
       - test_network
     ports:
@@ -47,8 +47,6 @@ services:
       - test_network
     depends_on:
       - fastapi
-      - redis
-      - elasticsearch
 
 networks:
   test_network:

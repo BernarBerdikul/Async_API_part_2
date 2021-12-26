@@ -1,6 +1,9 @@
+from http import HTTPStatus
 from typing import Optional, Union
 
 from aioredis import Redis
+from fastapi import HTTPException
+
 from core.config import CACHE_EXPIRE_IN_SECONDS
 from elasticsearch import AsyncElasticsearch, NotFoundError
 from models.film import ESFilm
@@ -38,8 +41,10 @@ class ServiceMixin:
             return await self.elastic.search(
                 index=_index, _source=_source, body=body, sort=sort_field
             )
-        except NotFoundError:
-            return None
+        except Exception as e:
+            raise HTTPException(
+                status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+                detail="not correctly field for search")
 
     async def get_by_id(self, target_id: str, schema: Schemas) -> Optional[ES_schemas]:
         """Пытаемся получить данные из кеша, потому что оно работает быстрее"""
