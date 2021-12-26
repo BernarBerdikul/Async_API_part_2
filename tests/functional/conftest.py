@@ -92,21 +92,16 @@ async def movies_index(es_client):
 
 @pytest.fixture
 def make_get_request(session):
-    async def inner(
-        endpoint: str = None, params: dict = None, url: str = None
-    ) -> HTTPResponse:
+    async def inner(endpoint: str = None, params: dict = None) -> HTTPResponse:
         """
         :param endpoint: str
             Путь до нашего конечного url
         :param params: Optional[dict]
             Параметры для запроса
-        :param url: Optional[str]
-            Готовый адрес конечного url
         :return:
         """
         params = params or {}
-        if not url:
-            url = f"{Settings.SERVICE_URL}/api/v1/{endpoint}"
+        url = f"{Settings.SERVICE_URL}/api/v1/{endpoint}"
         async with session.get(url=url, params=params) as response:
             return HTTPResponse(
                 body=await response.json(),

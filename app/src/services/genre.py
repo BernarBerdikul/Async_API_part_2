@@ -2,10 +2,8 @@ from functools import lru_cache
 from typing import Optional
 
 import orjson
-from aioredis import Redis
-from db.elastic import get_elastic
-from db.redis import get_redis
-from elasticsearch import AsyncElasticsearch
+from db.cache import AbstractCache, get_cache
+from db.storage import AbstractStorage, get_storage
 from fastapi import Depends
 from models.genre import ElasticGenre, FilmGenre
 from services.mixins import ServiceMixin
@@ -24,7 +22,7 @@ class GenreService(ServiceMixin):
         }
         """ Получаем число фильмов из стейт """
         state_total: int = await self.get_total_count()
-        params: str = f"{state_total}{page}{body}{page_size}"
+        params: str = f"{state_total}{page}{page_size}"
         """ Пытаемся получить данные из кэша """
         instance = await self._get_result_from_cache(
             key=create_hash_key(index=self.index, params=params)
@@ -43,7 +41,7 @@ class GenreService(ServiceMixin):
             ]
             """ Сохраняем жанры в кеш """
             data = orjson.dumps([i.dict() for i in genres])
-            new_param: str = f"{total}{page}{body}{page_size}"
+            new_param: str = f"{total}{page}{page_size}"
             await self._put_data_to_cache(
                 key=create_hash_key(index=self.index, params=new_param), instance=data
             )
@@ -69,7 +67,7 @@ class GenreService(ServiceMixin):
 # get_genre_service — это провайдер GenreService. Синглтон
 @lru_cache()
 def get_genre_service(
-    redis: Redis = Depends(get_redis),
-    elastic: AsyncElasticsearch = Depends(get_elastic),
+    cache: AbstractCache = Depends(get_cache),
+    storage: AbstractStorage = Depends(get_storage),
 ) -> GenreService:
-    return GenreService(redis=redis, elastic=elastic, index="genre_test")
+    return GenreService(cache=cache, storage=storage, index="genre_test")

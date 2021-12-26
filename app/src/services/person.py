@@ -3,10 +3,8 @@ from http import HTTPStatus
 from typing import Optional
 
 import orjson
-from aioredis import Redis
-from db.elastic import get_elastic
-from db.redis import get_redis
-from elasticsearch import AsyncElasticsearch
+from db.cache import AbstractCache, get_cache
+from db.storage import AbstractStorage, get_storage
 from fastapi import Depends, HTTPException
 from models.film import ESFilm, ListResponseFilm
 from models.person import DetailResponsePerson, ElasticPerson
@@ -46,15 +44,17 @@ class PersonService(ServiceMixin):
             "query": {"ids": {"values": film_ids}},
         }
         state_key: str = "person_films"
-        params: str = f"{state_total}{page}{page_size}{body}"
+        params: str = f"{state_total}{page}{page_size}{film_ids}"
         """ Пытаемся получить фильмы персоны из кэша """
         instance = await self._get_result_from_cache(
             key=create_hash_key(index=self.index, params=params)
         )
         if not instance:
             docs: Optional[dict] = await self.search_in_elastic(
-                body=body, _index="movies"
+                body=body, _index="movies_test"
             )
+            if not docs:
+                return None
             """ Получаем фильмы персоны из ES """
             hits = get_hits(docs=docs, schema=ESFilm)
             """ Получаем число фильмов персоны """
@@ -67,7 +67,7 @@ class PersonService(ServiceMixin):
                 for film in hits
             ]
             data = orjson.dumps([i.dict() for i in person_films])
-            new_param: str = f"{total}{page}{body}{page_size}"
+            new_param: str = f"{total}{page}{page_size}{film_ids}"
             await self._put_data_to_cache(
                 key=create_hash_key(index=state_key, params=new_param), instance=data
             )
@@ -101,7 +101,7 @@ class PersonService(ServiceMixin):
         }
         """ Получаем число персон из стейт """
         state_total: int = await self.get_total_count()
-        params: str = f"{state_total}{page}{page_size}{body}"
+        params: str = f"{state_total}{page}{page_size}{query}"
         """ Пытаемся получить данные из кэша """
         instance = await self._get_result_from_cache(
             key=create_hash_key(index=self.index, params=params)
@@ -126,7 +126,7 @@ class PersonService(ServiceMixin):
             ]
             """ Сохраняем персон в кеш """
             data = orjson.dumps([i.dict() for i in persons])
-            new_param: str = f"{total}{page}{body}{page_size}"
+            new_param: str = f"{total}{page}{page_size}{query}"
             await self._put_data_to_cache(
                 key=create_hash_key(index=self.index, params=new_param), instance=data
             )
@@ -154,7 +154,7 @@ class PersonService(ServiceMixin):
 # get_person_service — это провайдер PersonService. Синглтон
 @lru_cache()
 def get_person_service(
-    redis: Redis = Depends(get_redis),
-    elastic: AsyncElasticsearch = Depends(get_elastic),
+    cache: AbstractCache = Depends(get_cache),
+    storage: AbstractStorage = Depends(get_storage),
 ) -> PersonService:
-    return PersonService(redis=redis, elastic=elastic, index="person_test")
+    return PersonService(cache=cache, storage=storage, index="person_test")
