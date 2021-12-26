@@ -61,7 +61,7 @@ async def person_index(es_client):
         row_data=testdata.person_data,
     )
     yield
-    # await es_client.indices.delete(index=index)
+    await es_client.indices.delete(index=index)
 
 
 @pytest.fixture
