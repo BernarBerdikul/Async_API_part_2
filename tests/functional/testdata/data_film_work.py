@@ -1281,13 +1281,19 @@ film_work_data: list[dict] = [
             {"id": "a5a8f573-3cee-4ccc-8a2b-91cb9f55250a", "full_name": "George Lucas"}
         ],
     },
-
-]
-film_work_data: list[dict] = [
     {
         "id": "3b914679-1f5e-4cbd-8044-d13d35d5236c",
         "title": "Star Wars: Episode I - The Phantom Menace",
-        "description": "The evil Trade Federation, led by Nute Gunray is planning to take over the peaceful world of Naboo. Jedi Knights Qui-Gon Jinn and Obi-Wan Kenobi are sent to confront the leaders. But not everything goes to plan. The two Jedi escape, and along with their new Gungan friend, Jar Jar Binks head to Naboo to warn Queen Amidala, but droids have already started to capture Naboo and the Queen is not safe there. Eventually, they land on Tatooine, where they become friends with a young boy known as Anakin Skywalker. Qui-Gon is curious about the boy, and sees a bright future for him. The group must now find a way of getting to Coruscant and to finally solve this trade dispute, but there is someone else hiding in the shadows. Are the Sith really extinct? Is the Queen really who she says she is? And what's so special about this young boy?",
+        "description": "The evil Trade Federation, led by Nute Gunray is planning to take over the peaceful world of "
+                       "Naboo. Jedi Knights Qui-Gon Jinn and Obi-Wan Kenobi are sent to confront the leaders. But not "
+                       "everything goes to plan. The two Jedi escape, and along with their new Gungan friend, "
+                       "Jar Jar Binks head to Naboo to warn Queen Amidala, but droids have already started to capture "
+                       "Naboo and the Queen is not safe there. Eventually, they land on Tatooine, where they become "
+                       "friends with a young boy known as Anakin Skywalker. Qui-Gon is curious about the boy, "
+                       "and sees a bright future for him. The group must now find a way of getting to Coruscant and "
+                       "to finally solve this trade dispute, but there is someone else hiding in the shadows. Are the "
+                       "Sith really extinct? Is the Queen really who she says she is? And what's so special about "
+                       "this young boy?",
         "imdb_rating": 6.5,
         "genre": ["Fantasy", "Sci-Fi", "Action", "Adventure"],
         "director": ["George Lucas"],
@@ -1322,7 +1328,10 @@ film_work_data: list[dict] = [
         "imdb_rating": 7.5,
         "genre": ["Fantasy", "Sci-Fi", "Action", "Adventure"],
         "title": "Star Wars: Episode III - Revenge of the Sith",
-        "description": "Near the end of the Clone Wars, Darth Sidious has revealed himself and is ready to execute the last part of his plan to rule the galaxy. Sidious is ready for his new apprentice, Darth Vader, to step into action and kill the remaining Jedi. Vader, however, struggles to choose the dark side and save his wife or remain loyal to the Jedi order.",
+        "description": "Near the end of the Clone Wars, Darth Sidious has revealed himself and is ready to execute "
+                       "the last part of his plan to rule the galaxy. Sidious is ready for his new apprentice, "
+                       "Darth Vader, to step into action and kill the remaining Jedi. Vader, however, struggles to "
+                       "choose the dark side and save his wife or remain loyal to the Jedi order.",
         "director": ["George Lucas"],
         "actors_names": [
             "Natalie Portman",
@@ -1361,7 +1370,23 @@ film_work_data: list[dict] = [
         "imdb_rating": 6.5,
         "genre": ["Sci-Fi", "Adventure", "Fantasy", "Action"],
         "title": "Star Wars: Episode II - Attack of the Clones",
-        "description": "Ten years after the invasion of Naboo, the Galactic Republic is facing a Separatist movement and the former queen and now Senator Padmé Amidala travels to Coruscant to vote on a project to create an army to help the Jedi to protect the Republic. Upon arrival, she escapes from an attempt to kill her, and Obi-Wan Kenobi and his Padawan Anakin Skywalker are assigned to protect her. They chase the shape-shifter Zam Wessell but she is killed by a poisoned dart before revealing who hired her. The Jedi Council assigns Obi-Wan Kenobi to discover who has tried to kill Amidala and Anakin to protect her in Naboo. Obi-Wan discovers that the dart is from the planet Kamino, and he heads to the remote planet. He finds an army of clones that has been under production for years for the Republic and that the bounty hunter Jango Fett was the matrix for the clones. Meanwhile Anakin and Amidala fall in love with each other, and he has nightmarish visions of his mother. They travel to his home planet, Tatooine, to see his mother, and he discovers that she has been abducted by Tusken Raiders. Anakin finds his mother dying, and he kills all the Tusken tribe, including the women and children. Obi-Wan follows Jango Fett to the planet Geonosis where he discovers who is behind the Separatist movement. He transmits his discoveries to Anakin since he cannot reach the Jedi Council. Who is the leader of the Separatist movement? Will Anakin receive Obi-Wan's message? And will the secret love between Anakin and Amidala succeed?",
+        "description": "Ten years after the invasion of Naboo, the Galactic Republic is facing a Separatist movement "
+                       "and the former queen and now Senator Padmé Amidala travels to Coruscant to vote on a project "
+                       "to create an army to help the Jedi to protect the Republic. Upon arrival, she escapes from an "
+                       "attempt to kill her, and Obi-Wan Kenobi and his Padawan Anakin Skywalker are assigned to "
+                       "protect her. They chase the shape-shifter Zam Wessell but she is killed by a poisoned dart "
+                       "before revealing who hired her. The Jedi Council assigns Obi-Wan Kenobi to discover who has "
+                       "tried to kill Amidala and Anakin to protect her in Naboo. Obi-Wan discovers that the dart is "
+                       "from the planet Kamino, and he heads to the remote planet. He finds an army of clones that "
+                       "has been under production for years for the Republic and that the bounty hunter Jango Fett "
+                       "was the matrix for the clones. Meanwhile Anakin and Amidala fall in love with each other, "
+                       "and he has nightmarish visions of his mother. They travel to his home planet, Tatooine, "
+                       "to see his mother, and he discovers that she has been abducted by Tusken Raiders. Anakin "
+                       "finds his mother dying, and he kills all the Tusken tribe, including the women and children. "
+                       "Obi-Wan follows Jango Fett to the planet Geonosis where he discovers who is behind the "
+                       "Separatist movement. He transmits his discoveries to Anakin since he cannot reach the Jedi "
+                       "Council. Who is the leader of the Separatist movement? Will Anakin receive Obi-Wan's message? "
+                       "And will the secret love between Anakin and Amidala succeed?",
         "director": ["George Lucas"],
         "actors_names": [
             "Christopher Lee",
@@ -1399,4 +1424,5 @@ film_work_data: list[dict] = [
             {"id": "a5a8f573-3cee-4ccc-8a2b-91cb9f55250a", "full_name": "George Lucas"}
         ],
     },
+
 ]
