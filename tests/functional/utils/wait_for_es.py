@@ -2,8 +2,10 @@ from time import sleep
 
 import requests
 
+from tests.functional.settings import Settings
 
-def wait_for_es(url: str = "http://127.0.0.1:9200"):
+
+def wait_for_es(url: str = f"http://{Settings.ELASTIC_URL}"):
     """Дождаться пока по адресу url заработает сервер ElasticSearch"""
     # Отправляем запрос в Elastic
     while True:

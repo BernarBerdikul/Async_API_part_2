@@ -2,9 +2,13 @@ import asyncio
 
 import aioredis
 
+from tests.functional.settings import Settings
+
 
 async def redis_connect():
-    return await aioredis.create_redis_pool(("127.0.0.1", 6379), minsize=10, maxsize=20)
+    return await aioredis.create_redis_pool(
+        (Settings.REDIS_HOST, Settings.REDIS_PORT), minsize=10, maxsize=20
+    )
 
 
 async def wait_for_redis(redis_client):

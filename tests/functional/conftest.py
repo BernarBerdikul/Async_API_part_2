@@ -28,7 +28,7 @@ def event_loop():
 
 @pytest.fixture(scope="session")
 async def es_client():
-    client = AsyncElasticsearch(hosts="127.0.0.1:9200")
+    client = AsyncElasticsearch(hosts=Settings.ELASTIC_URL)
     yield client
     await client.close()
 
@@ -43,7 +43,7 @@ async def session():
 @pytest.fixture()
 async def redis_cache():
     cache = await aioredis.create_redis_pool(
-        ("127.0.0.1", 6379), minsize=10, maxsize=20
+        (Settings.REDIS_HOST, Settings.REDIS_PORT), minsize=10, maxsize=20
     )
     await cache.flushall()
     yield cache

@@ -1,30 +1,26 @@
+from http import HTTPStatus
 from typing import Optional
 
 import aioredis
 import pytest
 
 from ..settings import Settings
-from ..testdata.films_params import film_search_params, film_list_params
+from ..testdata.films_params import film_list_params, film_search_params
 from ..utils.hash_key_creater import create_hash_key
 from ..utils.status_films import check_films_result
 
 
 @pytest.mark.parametrize(
-    "endpoint, query, expected_status",
-    [
-        *film_search_params,
-        *film_list_params
-    ]
-
+    "endpoint, query, expected_status", [*film_search_params, *film_list_params]
 )
 @pytest.mark.asyncio
 async def test_get_list_films(
-        movies_index,
-        make_get_request,
-        redis_cache: aioredis,
-        endpoint: str,
-        query: dict,
-        expected_status: int,
+    movies_index,
+    make_get_request,
+    redis_cache: aioredis,
+    endpoint: str,
+    query: dict,
+    expected_status: int,
 ):
     response = await make_get_request(endpoint=f"{endpoint}", params=query)
 
@@ -46,7 +42,7 @@ async def test_get_list_films(
 
     key: str = create_hash_key(
         index=Settings.MOVIES_INDEX,
-        params=f"{total}{page}{sort}{page_size}{search}{genre}"
+        params=f"{total}{page}{sort}{page_size}{search}{genre}",
     )
 
     assert redis_cache.get(key=key) is not None
@@ -55,21 +51,17 @@ async def test_get_list_films(
 
 
 @pytest.mark.asyncio
-async def test_get_film(
-        movies_index,
-        make_get_request,
-        redis_cache
-):
+async def test_get_film(movies_index, make_get_request, redis_cache):
     expected_film_id: str = "201c0ec8-2add-4d55-90e9-6596afd6dfe9"
     expected_not_found_film_id: str = "201c0ec8-333-4d55-90e9-6596afd6dfe9"
     response = await make_get_request(endpoint=f"film/{expected_film_id}")
     # фильм найден
-    assert expected_film_id == response.body.get('uuid')
+    assert expected_film_id == response.body.get("uuid")
     # запрос имеет статус 200
-    assert 200 == response.status
+    assert HTTPStatus.OK == response.status
     # проверка на несуществующий id
     response = await make_get_request(endpoint=f"film/{expected_not_found_film_id}")
-    assert 404 == response.status
+    assert HTTPStatus.NOT_FOUND == response.status
 
     assert redis_cache.get(key=expected_film_id) is not None
     await redis_cache.flushall()
