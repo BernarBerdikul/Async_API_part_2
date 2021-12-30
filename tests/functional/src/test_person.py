@@ -3,14 +3,11 @@ from http import HTTPStatus
 
 import pytest
 
-from tests.functional.schemas.movie_schema import FilmPaginationValidation
-from tests.functional.schemas.person_schema import (
-    DetailPersonValidation,
-    PersonPaginationValidation,
-)
-from tests.functional.settings import Settings
-from tests.functional.testdata import film_work_data, person_data
-from tests.functional.utils.hash_key_creater import create_hash_key
+from ..schemas.movie_schema import FilmPaginationValidation
+from ..schemas.person_schema import DetailPersonValidation, PersonPaginationValidation
+from ..settings import Settings
+from ..testdata import film_work_data, person_data
+from ..utils.hash_key_creater import create_hash_key
 
 pytestmark = pytest.mark.asyncio
 

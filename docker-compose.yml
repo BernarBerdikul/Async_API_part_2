@@ -1,12 +1,11 @@
 
 services:
   test_redis:
-    image: docker.io/bitnami/redis:5.0.14
     container_name: test_redis
+    image: docker.io/bitnami/redis:5.0.14
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - '6379:6379'
     networks:
@@ -41,12 +40,12 @@ services:
   test_service:
     container_name: test_service
     build:
-      context: ./tests/functional
+      context: .
       dockerfile: Dockerfile
     entrypoint: >
-      sh -c python /tests/functional/utils/wait_for_es.py
-      && python /tests/functional/utils/wait_for_redis.py
-      && pytest /tests/functional/src"
+      sh -c "python functional/utils/wait_for_es.py
+      && python functional/utils/wait_for_redis.py
+      && pytest functional/src"
     networks:
       - test_network
     depends_on:

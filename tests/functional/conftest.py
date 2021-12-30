@@ -7,9 +7,9 @@ import pytest
 from elasticsearch import AsyncElasticsearch
 from multidict import CIMultiDictProxy
 
-from tests.functional import es_index, testdata
-from tests.functional.settings import Settings
-from tests.functional.testdata.data_inserter import es_index_loader
+from ..functional import es_index, testdata
+from ..functional.settings import Settings
+from ..functional.testdata.data_inserter import es_index_loader
 
 
 @dataclass

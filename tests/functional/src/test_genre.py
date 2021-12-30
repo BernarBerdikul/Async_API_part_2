@@ -3,13 +3,10 @@ from http import HTTPStatus
 
 import pytest
 
-from tests.functional.schemas.genre_schema import (
-    FilmGenreValidation,
-    GenrePaginationValidation,
-)
-from tests.functional.settings import Settings
-from tests.functional.testdata import genre_data
-from tests.functional.utils.hash_key_creater import create_hash_key
+from ..schemas.genre_schema import FilmGenreValidation, GenrePaginationValidation
+from ..settings import Settings
+from ..testdata import genre_data
+from ..utils.hash_key_creater import create_hash_key
 
 pytestmark = pytest.mark.asyncio
 
