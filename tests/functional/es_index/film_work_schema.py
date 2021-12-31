@@ -13,10 +13,14 @@ FILM_WORK_INDEX_BODY: dict = {
             },
             "description": {"type": "text", "analyzer": "ru_en"},
             "imdb_rating": {"type": "float"},
-            "genre": {"type": "text", "analyzer": "ru_en"},
-            "director": {"type": "text", "analyzer": "ru_en"},
-            "actors_names": {"type": "text", "analyzer": "ru_en"},
-            "writers_names": {"type": "text", "analyzer": "ru_en"},
+            "genre": {
+                "type": "nested",
+                "dynamic": "strict",
+                "properties": {
+                    "id": {"type": "keyword"},
+                    "name": {"type": "text", "analyzer": "ru_en"},
+                },
+            },
             "actors": {
                 "type": "nested",
                 "dynamic": "strict",

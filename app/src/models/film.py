@@ -11,8 +11,7 @@ class ESFilm(BaseModel):
     title: str
     description: Optional[str] = None
     imdb_rating: Optional[float] = None
-    genre: Optional[list[str]] = None
-    director: Optional[list[str]] = None
+    genre: Optional[list[dict[str, str]]] = None
     actors: Optional[list[dict[str, str]]] = None
     writers: Optional[list[dict[str, str]]] = None
     directors: Optional[list[dict[str, str]]] = None

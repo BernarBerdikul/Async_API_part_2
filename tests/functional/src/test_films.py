@@ -1,3 +1,5 @@
+import asyncio
+from http import HTTPStatus
 from typing import Optional
 
 import aioredis
@@ -7,6 +9,7 @@ from ..settings import Settings
 from ..testdata.films_params import film_search_params, film_list_params
 from ..utils.hash_key_creater import create_hash_key
 from ..utils.status_films import check_films_result
+from ..testdata.data_film_work import expected_film_data, not_found_film_data
 
 
 @pytest.mark.parametrize(
@@ -26,6 +29,7 @@ async def test_get_list_films(
         query: dict,
         expected_status: int,
 ):
+    await asyncio.sleep(3)
     response = await make_get_request(endpoint=f"{endpoint}", params=query)
 
     check_films_result(
@@ -60,17 +64,27 @@ async def test_get_film(
         make_get_request,
         redis_cache
 ):
-    expected_film_id: str = "201c0ec8-2add-4d55-90e9-6596afd6dfe9"
-    expected_not_found_film_id: str = "201c0ec8-333-4d55-90e9-6596afd6dfe9"
-    response = await make_get_request(endpoint=f"film/{expected_film_id}")
-    # фильм найден
-    assert expected_film_id == response.body.get('uuid')
-    # запрос имеет статус 200
-    assert 200 == response.status
-    # проверка на несуществующий id
-    response = await make_get_request(endpoint=f"film/{expected_not_found_film_id}")
-    assert 404 == response.status
 
-    assert redis_cache.get(key=expected_film_id) is not None
+    response = await make_get_request(endpoint=f"film/{expected_film_data.get('uuid')}")
+    await asyncio.sleep(3)
+
+    assert HTTPStatus.OK == response.status
+    assert expected_film_data.get("uuid") == response.body.get("uuid")
+    assert expected_film_data.get("title") == response.body.get("title")
+    assert expected_film_data.get("imdb_rating") == response.body.get("imdb_rating")
+    assert expected_film_data.get("description") == response.body.get("description")
+    assert expected_film_data.get("genre") == response.body.get("genre")
+    assert expected_film_data.get('actors') == response.body.get('actors')
+    assert expected_film_data.get('writers') == response.body.get('writers')
+    assert expected_film_data.get('directors') == response.body.get('directors')
+
+    assert redis_cache.get(key=expected_film_data.get('uuid')) is not None
     await redis_cache.flushall()
-    assert await redis_cache.get(key=expected_film_id) is None
+    assert await redis_cache.get(key=expected_film_data.get('uuid')) is None
+
+    # проверка несуществуеего фильма
+    response = await make_get_request(endpoint=f"film/{not_found_film_data.get('uuid')}")
+    assert HTTPStatus.NOT_FOUND == response.status
+    assert redis_cache.get(key=expected_film_data.get('uuid')) is not None
+    await redis_cache.flushall()
+    assert await redis_cache.get(key=expected_film_data.get('uuid')) is None
