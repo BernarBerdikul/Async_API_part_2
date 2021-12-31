@@ -6,7 +6,7 @@ from services.mixins import Schemas
 
 
 def get_params_films_to_elastic(
-        page_size: int = 10, page: int = 1, genre: str = None, query: str = None
+    page_size: int = 10, page: int = 1, genre: str = None, query: str = None
 ) -> dict:
     """
     :param page:
@@ -17,13 +17,7 @@ def get_params_films_to_elastic(
     """
     films_search = None
     if genre:
-        films_search = {
-            "fuzzy": {
-                "genre": {
-                    "value": genre
-                }
-            }
-        }
+        films_search = {"fuzzy": {"genre": {"value": genre}}}
     if query:
         body: dict = {
             "size": page_size,
@@ -46,7 +40,7 @@ def get_params_films_to_elastic(
                     },
                     "filter": films_search,
                 }
-            }
+            },
         }
     return body
 

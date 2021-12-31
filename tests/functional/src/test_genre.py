@@ -1,43 +1,31 @@
 import asyncio
+from http import HTTPStatus
 
 import pytest
 
-from tests.functional.schemas.genre_schema import (
-    FilmGenreValidation,
-    GenrePaginationValidation
-)
-from tests.functional.settings import Settings
-from tests.functional.utils.hash_key_creater import create_hash_key
+from ..schemas.genre_schema import FilmGenreValidation, GenrePaginationValidation
+from ..settings import Settings
+from ..testdata import genre_data
+from ..utils.hash_key_creater import create_hash_key
 
 pytestmark = pytest.mark.asyncio
 
 
 async def test_list_genre(genre_index, make_get_request, redis_cache):
     await asyncio.sleep(3)
-    expected: dict = {
-        "total": 5,
-        "page": 1,
-        "page_size": 10,
-        "next_page": None,
-        "previous_page": None,
-        "available_pages": 1,
-        "genres": [
-            {"uuid": "526769d7-df18-4661-9aa6-49ed24e9dfd8", "name": "Thriller"},
-            {"uuid": "6a0a479b-cfec-41ac-b520-41b2b007b611", "name": "Animation"},
-            {"uuid": "b92ef010-5e4c-4fd0-99d6-41b6456272cd", "name": "Fantasy"},
-            {"uuid": "ca88141b-a6b4-450d-bbc3-efa940e4953f", "name": "Mystery"},
-            {"uuid": "237fd1e4-c98e-454e-aa13-8a13fb7547b5", "name": "Romance"},
-        ],
-    }
     # Выполнение запроса
     response = await make_get_request(endpoint="genre/")
     response_body = response.body
-    print()
-    print(response)
-    # Проверка результата
-    assert response.status == 200
-    assert response_body == expected
+    response_genres = response_body.get("genres")
+    # Проверка результата Elastic
+    assert response.status == HTTPStatus.OK
     assert GenrePaginationValidation(**response_body)
+    assert response_body.get("total") == len(genre_data)
+    for genre in genre_data:
+        for response_genre in response_genres:
+            if genre.get("id") == response_genre.get("uuid"):
+                assert genre.get("id") == response_genre.get("uuid")
+                assert genre.get("name") == response_genre.get("name")
     # Проверка результата Redis
     page: int = response_body.get("page")
     page_size: int = response_body.get("page_size")
@@ -51,15 +39,17 @@ async def test_list_genre(genre_index, make_get_request, redis_cache):
 
 
 async def test_genre_by_id(genre_index, make_get_request, redis_cache):
-    genre_id: str = "526769d7-df18-4661-9aa6-49ed24e9dfd8"
-    expected: dict = {"uuid": genre_id, "name": "Thriller"}
-    # Выполнение запроса
-    response = await make_get_request(endpoint=f"genre/{genre_id}")
-    # Проверка результата Elastic
-    assert response.status == 200
-    assert response.body == expected
-    assert FilmGenreValidation(**response.body)
-    # Проверка результата Redis
-    assert await redis_cache.get(key=genre_id) is not None
-    await redis_cache.flushall()
-    assert await redis_cache.get(key=genre_id) is None
+    for test_genre in genre_data:
+        genre_id: str = test_genre.get("id")
+        # Выполнение запроса
+        response = await make_get_request(endpoint=f"genre/{genre_id}")
+        response_body = response.body
+        # Проверка результата Elastic
+        assert response.status == HTTPStatus.OK
+        assert FilmGenreValidation(**response_body)
+        assert test_genre.get("id") == response_body.get("uuid")
+        assert test_genre.get("name") == response_body.get("name")
+        # Проверка результата Redis
+        assert await redis_cache.get(key=genre_id) is not None
+        await redis_cache.flushall()
+        assert await redis_cache.get(key=genre_id) is None
